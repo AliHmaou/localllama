@@ -62,14 +62,18 @@ def getModelChatResponse( message, messages_history):
 ## RUN
 
 
-models_list = [
-    {"repo_id":"bartowski/gemma-2-9b-it-GGUF","filename":"gemma-2-9b-it-Q5_K_M.gguf"},
-    {"repo_id":"bartowski/Meta-Llama-3.1-8B-Instruct-GGUF","filename":"Meta-Llama-3.1-8B-Instruct-Q6_K.gguf"},
-    {"repo_id":"defog/sqlcoder-7b-2","filename":"sqlcoder-7b-q5_k_m.gguf"},
-]
+import duckdb as ddb
+models_list = ddb.sql(
+    """
+	SELECT model_rank,repo_id, default_file_name, repo_url
+	FROM 
+	"https://huggingface.co/datasets/alihmaou/HUGGINGFACE_TRENDING_GGUFS_LIST/resolve/main/data/train-00000-of-00001.parquet"
+	where model_rank <100
+    order by model_rank;"""
+).to_df()
 
-repo_id=models_list[0]["repo_id"]
-filename=models_list[0]["filename"]
+repo_id=models_list[16]["repo_id"]
+filename=models_list[16]["filename"]
 
 n_ctx=4048
 verbose=False
