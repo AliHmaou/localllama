@@ -75,7 +75,7 @@ models_list = ddb.sql(
     order by model_rank;"""
 ).to_df()
 
-# Filtrer pour model_rank = 17
+# Set the model needed by it's rank number
 filtered_model = models_list[models_list["model_rank"] == 15]
 repo_id = filtered_model.iloc[0]["repo_id"]
 filename = filtered_model.iloc[0]["default_file_name"]
@@ -90,7 +90,6 @@ stream = True
 
 messages_history = [{"role": "user","content": "### SYSTEM : Tu es simplificateur de texte, tu rends les textes plus faciles a lire et a comprendre pour les personnes légèrements déficientes mentales ou apprenante du langage français."}]
 messages_history.append({"role": "assistant","content": "SET UP AND READY"})
-#messages_history.append({"role": "user","content": "Apprend moi le mot 'manger' et ses conjugaisons"})
 
 llm, filenameloaded = getModelInstance(repo_id,filename,n_gpu_layers,n_ctx,verbose)
 logger.info("LLM chargé : "+filenameloaded)
